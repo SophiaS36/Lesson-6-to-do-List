@@ -13,8 +13,16 @@ class ToDOTableTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         toDos = createToDos()
+        func getToDos(){
+            if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+                if let coreDataToDos = try? context.fetch(ToDoCD.fetchRequest()) as? [ToDoCD] {
+                        if let toDo = coreDataToDos {
+                            toDos = theToDos
+                            tableView.reloadData()
+                        }
+              }
+        }
     }
     
     func createToDos() -> [ToDo] {
@@ -54,12 +62,27 @@ class ToDOTableTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        let toDo = toDos[indexPath.row]
+        performSegue(withIdentifier: "moveToComplete", sender: toDo)
+        
+        
+    }
+    
     // In a storyboard-based application, you eill often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let addViewcontroller = segue.destination as? AddViewController {
             addViewcontroller.previousViewController = self
         }
+        if let CompleteViewController = segue.destination as? CompleteViewController{
+            if let toDo = sender as? ToDo{
+                CompleteViewController.selctorTodo = toDo
+                CompleteViewController.previousViewController = self 
+            }
+        }
+        
     }
+    
     
 
 }

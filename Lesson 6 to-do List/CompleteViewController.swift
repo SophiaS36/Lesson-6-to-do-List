@@ -8,14 +8,20 @@
 import UIKit
 // Comment HERE now
 class CompleteViewController: UIViewController {
-
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    var previousViewController = ToDOTableTableViewController()
+    var selctorTodo = ToDo()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        titleLabel.text = selctorTodo.name
         // Do any additional setup after loading the view.
     }
     
-
+    
+    
+    
     /*
     // MARK: - Navigation
 
